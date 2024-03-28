@@ -7,6 +7,7 @@
     <LangVersion>latest</LangVersion>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,11 +23,11 @@
 
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>../References/Assembly-CSharp.dll</HintPath>
+      <HintPath>..\dependencies\Assembly-CSharp.dll</HintPath>
     </Reference>
-	  <Reference Include="PluginAPI">
-		  <HintPath>../References/PluginAPI.dll</HintPath>
-	  </Reference>
+    <Reference Include="PluginAPI">
+      <HintPath>..\dependencies\PluginAPI.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

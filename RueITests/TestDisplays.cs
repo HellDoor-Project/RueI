@@ -66,8 +66,8 @@ public class TestDisplayCore
             },
         };
 
-        Console.WriteLine(ElemCombiner.Combine(elements).Replace("\n", "<br>"));
-        Console.WriteLine(ElemCombiner.Combine(elementsTwo).Replace("\n", "<br>"));
+        Console.WriteLine(ElemCombiner.Combine(elements, null).Replace("\n", "<br>"));
+        Console.WriteLine(ElemCombiner.Combine(elementsTwo, null).Replace("\n", "<br>"));
     }
 
     [TestMethod]

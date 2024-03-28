@@ -1,5 +1,7 @@
 ﻿namespace RueI.Displays;
 
+using MEC;
+using PluginAPI.Core;
 using RueI.Displays.Scheduling;
 using RueI.Elements;
 using RueI.Extensions;
@@ -9,15 +11,20 @@ using RueI.Extensions;
 /// </summary>
 public class DisplayCore
 {
+    public static readonly Dictionary<string, float> PlayerOffset = new();
     // TODO: make this not break if someone rejoins
     private readonly List<DisplayBase> displays = new();
     private readonly Dictionary<IElemReference<Element>, Element> referencedElements = new();
 
+    private CoroutineHandle CoroutineHandle;
+
     static DisplayCore()
     {
-        RoundRestarting.RoundRestart.OnRestartTriggered += OnRestart;
-        ReferenceHub.OnPlayerRemoved += OnPlayerRemoved;
+        RoundRestarting.RoundRestart.OnRestartTriggered += OnRestartStatic;
+        ReferenceHub.OnPlayerRemoved += OnPlayerRemovedStatic;
     }
+
+    public MainDynamicPlayerElement MainElement => (displays[0] as Display).Elements[0] as MainDynamicPlayerElement;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DisplayCore"/> class.
@@ -33,6 +40,11 @@ public class DisplayCore
         }
 
         Scheduler = new(this);
+        Display MainDisplay = new Display(this);
+        MainDisplay.Elements.Add(new MainDynamicPlayerElement());
+        RoundRestarting.RoundRestart.OnRestartTriggered += OnRestart;
+        ReferenceHub.OnPlayerRemoved += OnPlayerRemoved;
+        CoroutineHandle = Timing.CallPeriodically(float.PositiveInfinity, 1f, () => InternalUpdate());
     }
 
     /// <summary>
@@ -167,10 +179,21 @@ public class DisplayCore
     /// </summary>
     internal void InternalUpdate()
     {
-        string text = ElemCombiner.Combine(GetAllElements());
+        string text = ElemCombiner.Combine(GetAllElements(), this);
+        if (string.IsNullOrEmpty(text))
+        {
+            if (!EmptyPrevious) { EmptyPrevious = true; }
+            else return;
+        }
+        else
+        {
+            EmptyPrevious = false;
+        }
         UnityAlternative.Provider.ShowHint(Hub, text);
         Events.Events.OnDisplayUpdated(new(this));
     }
+
+    public bool EmptyPrevious = false;
 
     /// <summary>
     /// Adds a display to this <see cref="DisplayCore"/>.
@@ -187,18 +210,44 @@ public class DisplayCore
     /// <summary>
     /// Cleans up the dictionary after the server restarts.
     /// </summary>
-    private static void OnRestart()
+    private static void OnRestartStatic()
     {
         DisplayCores.Clear();
     }
 
-    private static void OnPlayerRemoved(ReferenceHub hub)
+    private static void OnPlayerRemovedStatic(ReferenceHub hub)
     {
         DisplayCores.Remove(hub);
     }
 
+    private void OnRestart()
+    {
+        Log.Info($"Stopping update for {Hub?.nicknameSync?.MyNick ?? "null"} (Restart)");
+        Timing.KillCoroutines(CoroutineHandle);
+    }
+
+    private void OnPlayerRemoved(ReferenceHub hub)
+    {
+        if (hub == Hub)
+        {
+            Log.Info($"Stopping update for {Hub?.nicknameSync?.MyNick ?? "null"} (Left)");
+            Timing.KillCoroutines(CoroutineHandle);
+        }
+    }
+
     private IEnumerable<Element> GetAllElements() => displays.SelectMany(x => x.GetAllElements())
                                                       .Concat(referencedElements.Values.FilterDisabled());
+
+    public void RemoveDisplayById(string DisplayId)
+    {
+        foreach (DisplayBase baseDisplay in displays.ToArray())
+        {
+            if (baseDisplay is Display display && display.DisplayId==DisplayId)
+            {
+                displays.Remove(baseDisplay);
+            }
+        }
+    }
 
     private class ElemReference<T> : IElemReference<T>
         where T : Element

@@ -1,5 +1,6 @@
 namespace RueI.Elements;
 
+using RueI.Displays;
 using RueI.Elements.Enums;
 using RueI.Parsing;
 using RueI.Parsing.Records;
@@ -30,7 +31,7 @@ public abstract class Element
     /// <summary>
     /// Gets or sets the position of the element on a scale from 0-1000, where 0 represents the bottom of the screen and 1000 represents the top.
     /// </summary>
-    public float Position { get; set; }
+    public virtual float Position { get; set; }
 
     /// <summary>
     /// Gets or sets the priority of the hint (determining if it shows above another hint).
@@ -57,5 +58,29 @@ public abstract class Element
     /// <remarks>
     /// This contains information used to ensure that multiple elements can be displayed at once. To obtain this, you must use <see cref="Parser.Parse"/>.
     /// </remarks>
-    protected internal abstract ParsedData GetParsedData();
+    protected internal abstract ParsedData GetParsedData(DisplayCore core);
+
+    public virtual string EnsureEnding(string content)
+    {
+        if (string.IsNullOrEmpty(content)) return "";
+        if (!content.EndsWith("\n"))
+        {
+            content += "\n";
+        }
+        return content;
+    }
+
+    public virtual string GetCorrectLineHeight(string initial, int size=24)
+    {
+        if (string.IsNullOrEmpty(initial)) return "";
+        int lines = initial.Count(ch => ch == '\n');
+        int start = 27 - lines;
+
+        for (int i = 0; i < start; i++)
+        {
+            initial = "\n" + initial;
+        }
+
+        return initial;
+    }
 }

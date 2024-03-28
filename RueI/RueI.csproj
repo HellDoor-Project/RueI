@@ -21,6 +21,7 @@
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
 		<PackageReleaseNotes>various fixes, improvements to docs, new reflection helpers, and general cleanup</PackageReleaseNotes>
+		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 	</PropertyGroup>
 	
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -49,31 +50,35 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+		<PackageReference Include="System.Collections.Immutable" Version="8.0.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<Reference Include="Assembly-CSharp">
-			<HintPath>../References/Assembly-CSharp.dll</HintPath>
+		  <HintPath>..\dependencies\Assembly-CSharp.dll</HintPath>
 		</Reference>
 		<Reference Include="Assembly-CSharp-firstpass">
-			<HintPath>../References/Assembly-CSharp-firstpass.dll</HintPath>
+		  <HintPath>..\dependencies\Assembly-CSharp-firstpass.dll</HintPath>
+		</Reference>
+		<Reference Include="CommandSystem.Core">
+		  <HintPath>..\dependencies\CommandSystem.Core.dll</HintPath>
 		</Reference>
 		<Reference Include="Mirror">
-			<HintPath>../References/Mirror.dll</HintPath>
+		  <HintPath>..\dependencies\Mirror.dll</HintPath>
 		</Reference>
 		<Reference Include="NorthwoodLib">
-			<HintPath>../References/NorthwoodLib.dll</HintPath>
+		  <HintPath>..\dependencies\NorthwoodLib.dll</HintPath>
 		</Reference>
 		<Reference Include="PluginAPI">
-			<HintPath>../References/PluginAPI.dll</HintPath>
-		</Reference>
-		<Reference Include="UnityEngine">
-			<HintPath>../References/UnityEngine.dll</HintPath>
-		</Reference>
-		<Reference Include="UnityEngine.CoreModule">
-			<HintPath>../References/UnityEngine.CoreModule.dll</HintPath>
+		  <HintPath>..\dependencies\PluginAPI.dll</HintPath>
 		</Reference>
 		<Reference Include="System.Collections.Immutable">
 			<HintPath>../References/System.Collections.Immutable.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine">
+		  <HintPath>..\dependencies\UnityEngine.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.CoreModule">
+		  <HintPath>..\dependencies\UnityEngine.CoreModule.dll</HintPath>
 		</Reference>
 	</ItemGroup>
 	<ItemGroup>
@@ -85,5 +90,8 @@
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="RueI\Commands\" />
 	</ItemGroup>
 </Project>

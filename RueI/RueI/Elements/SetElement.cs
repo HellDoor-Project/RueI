@@ -1,5 +1,6 @@
 namespace RueI.Elements;
 
+using RueI.Displays;
 using RueI.Elements.Enums;
 using RueI.Elements.Interfaces;
 using RueI.Parsing;
@@ -28,5 +29,5 @@ public class SetElement : Element, ISettable
     public virtual string Content { get; set; }
 
     /// <inheritdoc/>
-    protected internal override ParsedData GetParsedData() => Parser.Parse(Content, Options);
+    protected internal override ParsedData GetParsedData(DisplayCore core) => Parser.Parse(Content, Options);
 }

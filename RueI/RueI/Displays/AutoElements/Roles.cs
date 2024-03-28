@@ -132,7 +132,7 @@ public enum Roles
     /// Gets the SCP-3114 role id.
     /// </summary>
     Scp3114 = 1 << RoleTypeId.Scp3114,
-
+#if CRISTMAS
     /// <summary>
     /// Gets the Flamingo role id.
     /// </summary>
@@ -147,7 +147,7 @@ public enum Roles
     /// Gets the Zombie Flamingo role id.
     /// </summary>
     ZombieFlamingo = 1 << RoleTypeId.ZombieFlamingo,
-
+#endif
     /// <summary>
     /// Gets all of the NTF role ids, including Facility Guards.
     /// </summary>
@@ -172,12 +172,12 @@ public enum Roles
     /// Gets all of the human role ids.
     /// </summary>
     HumanRoles = MilitaryRoles | CivilianRoles,
-
+#if CRISTMAS
     /// <summary>
     /// Gets all of the flamingo role ids.
     /// </summary>
     FlamingoSide = Flamingo | AlphaFlamingo,
-
+#endif
     /// <summary>
     /// Gets all of the SCP role ids, excluding SCP-049-2 and Zombie Flamingos.
     /// </summary>
@@ -186,5 +186,8 @@ public enum Roles
     /// <summary>
     /// Gets all of the SCP role ids, including SCP-049-2 and Zombie Flamingos.
     /// </summary>
-    Scps = ScpsNo0492 | Scp0492 | ZombieFlamingo,
+    Scps = ScpsNo0492 | Scp0492,
+        #if CRISTMAS
+        |ZombieFlamingo 
+        #endif
 }

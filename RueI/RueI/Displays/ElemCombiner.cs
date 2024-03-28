@@ -22,7 +22,7 @@ public static class ElemCombiner
     /// </summary>
     /// <param name="enumElems">The <see cref="IEnumerable{T}"/> of <see cref="Element"/>s to combine.</param>
     /// <returns>A <see cref="string"/> with all of the combined <see cref="Element"/>s.</returns>
-    public static string Combine(IEnumerable<Element> enumElems)
+    public static string Combine(IEnumerable<Element> enumElems, DisplayCore core)
     {
         List<Element> elements = ListPool<Element>.Shared.Rent(enumElems);
 
@@ -44,7 +44,7 @@ public static class ElemCombiner
         {
             Element curElement = elements[i];
 
-            ParsedData parsedData = curElement.GetParsedData();
+            ParsedData parsedData = curElement.GetParsedData(core);
 
             float funcPos = curElement.GetFunctionalPosition();
             if (curElement.Options.HasFlagFast(Elements.Enums.ElementOptions.PreserveSpacing))
