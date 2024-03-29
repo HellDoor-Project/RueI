@@ -1,7 +1,7 @@
 ﻿namespace RueI.Displays;
 
 using System.Text;
-
+using GameCore;
 using NorthwoodLib.Pools;
 
 using RueI.Elements;
@@ -43,31 +43,40 @@ public static class ElemCombiner
         for (int i = 0; i < elements.Count; i++)
         {
             Element curElement = elements[i];
-
-            ParsedData parsedData = curElement.GetParsedData(core);
-
-            float funcPos = curElement.GetFunctionalPosition();
-            if (curElement.Options.HasFlagFast(Elements.Enums.ElementOptions.PreserveSpacing))
+            try
             {
-                funcPos -= parsedData.Offset;
-            }
+                ParsedData parsedData = curElement.GetParsedData(core);
 
-            if (i != 0)
+
+                float funcPos = curElement.GetFunctionalPosition();
+                if (curElement.Options.HasFlagFast(Elements.Enums.ElementOptions.PreserveSpacing))
+                {
+                    funcPos -= parsedData.Offset;
+                }
+
+                if (i != 0)
+                {
+                    float calcedOffset = CalculateOffset(lastPosition, lastOffset, funcPos);
+                    sb.Append($"<line-height={calcedOffset}px>\n<line-height=40.665>");
+                    totalOffset += calcedOffset;
+                }
+                else
+                {
+                    totalOffset += funcPos;
+                }
+
+                sb.Append(parsedData.Content);
+
+                totalOffset += parsedData.Offset;
+                lastPosition = funcPos;
+                lastOffset = parsedData.Offset;
+            }
+            catch (Exception e)
             {
-                float calcedOffset = CalculateOffset(lastPosition, lastOffset, funcPos);
-                sb.Append($"<line-height={calcedOffset}px>\n<line-height=40.665>");
-                totalOffset += calcedOffset;
+                PluginAPI.Core.Log.Error($"Error Getting element content!");
+                PluginAPI.Core.Log.Error(e.ToString());
+                continue;
             }
-            else
-            {
-                totalOffset += funcPos;
-            }
-
-            sb.Append(parsedData.Content);
-
-            totalOffset += parsedData.Offset;
-            lastPosition = funcPos;
-            lastOffset = parsedData.Offset;
         }
 
         ListPool<Element>.Shared.Return(elements);
