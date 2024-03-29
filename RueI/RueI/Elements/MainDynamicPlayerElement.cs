@@ -70,13 +70,21 @@ public class MainDynamicPlayerElement : Element
 
         foreach (GetPlayerContent element in Elements)
         {
-            string elemText = element(player);
+            try
+            {
+                string elemText = element(player);
 
-            if (string.IsNullOrEmpty(elemText)) continue;
+                if (string.IsNullOrEmpty(elemText)) continue;
 
-            elemText = EnsureEnding(elemText);
+                elemText = EnsureEnding(elemText);
 
-            elemsTexts += elemText;
+                elemsTexts += elemText;
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"[MainElement] Error getting sub-element contents");
+                Log.Error(ex.ToString());
+            }
         }
 
         if (string.IsNullOrEmpty(elemsTexts)) return "";
