@@ -21,7 +21,21 @@ public class DisplayCore
     static DisplayCore()
     {
         RoundRestarting.RoundRestart.OnRestartTriggered += OnRestartStatic;
-        ReferenceHub.OnPlayerRemoved += OnPlayerRemovedStatic;
+        //ReferenceHub.OnPlayerRemoved += OnPlayerRemovedStatic;
+    }
+
+    public void DestroySelf()
+    {
+        Timing.KillCoroutines(CoroutineHandle);
+        DisplayCores.Remove(Hub);
+        RoundRestarting.RoundRestart.OnRestartTriggered -= OnRestart;
+        ReferenceHub.OnPlayerRemoved -= OnPlayerRemoved;
+        displays.Clear();
+    }
+
+    ~DisplayCore()
+    {
+        DestroySelf();
     }
 
     public MainDynamicPlayerElement MainElement => (displays[0] as Display).Elements[0] as MainDynamicPlayerElement;
@@ -214,16 +228,17 @@ public class DisplayCore
     {
         DisplayCores.Clear();
     }
-
+/*
     private static void OnPlayerRemovedStatic(ReferenceHub hub)
     {
         DisplayCores.Remove(hub);
-    }
+    }*/
 
     private void OnRestart()
     {
         Log.Info($"Stopping update for {Hub?.nicknameSync?.MyNick ?? "null"} (Restart)");
-        Timing.KillCoroutines(CoroutineHandle);
+        DestroySelf();
+        
     }
 
     private void OnPlayerRemoved(ReferenceHub hub)
@@ -231,7 +246,7 @@ public class DisplayCore
         if (hub == Hub)
         {
             Log.Info($"Stopping update for {Hub?.nicknameSync?.MyNick ?? "null"} (Left)");
-            Timing.KillCoroutines(CoroutineHandle);
+            DestroySelf();
         }
     }
 
