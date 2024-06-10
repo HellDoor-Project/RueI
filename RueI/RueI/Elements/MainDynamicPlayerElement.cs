@@ -86,13 +86,11 @@ public class MainDynamicPlayerElement : Element
                 Log.Error(ex.ToString());
             }
         }
-
         if (string.IsNullOrEmpty(elemsTexts)) return "";
 
         elemsTexts = GetCorrectLineHeight(elemsTexts);
 
         content.Append(elemsTexts);
-
         content.CloseSize();
         return content.ToString();
     }

@@ -210,7 +210,7 @@ public static class HintBuilding
     /// <param name="sb">The <see cref="StringBuilder"/> to use.</param>
     /// <param name="alpha">The alpha (0-255) of the color.</param>
     /// <returns>A reference to the original <see cref="StringBuilder"/>.</returns>
-    public static StringBuilder SetAlpha(this StringBuilder sb, byte alpha) => sb.Append($"<alpha={alpha:X2}>");
+    public static StringBuilder SetAlpha(this StringBuilder sb, byte alpha) => sb.Append($"<alpha=#{alpha:X2}>");
 
     /// <summary>
     /// Adds an alpha tag to a <see cref="StringBuilder"/>.
@@ -218,7 +218,7 @@ public static class HintBuilding
     /// <param name="sb">The <see cref="StringBuilder"/> to use.</param>
     /// <param name="alpha">The alpha (0-255) of the color.</param>
     /// <returns>A reference to the original <see cref="StringBuilder"/>.</returns>
-    public static StringBuilder SetAlpha(this StringBuilder sb, int alpha) => sb.Append($"<alpha={alpha:X2}>");
+    public static StringBuilder SetAlpha(this StringBuilder sb, int alpha) => sb.Append($"<alpha=#{alpha:X2}>");
 
     /// <summary>
     /// Adds a bold tag to a <see cref="StringBuilder"/>.

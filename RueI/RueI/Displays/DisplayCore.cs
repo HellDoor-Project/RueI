@@ -18,6 +18,8 @@ public class DisplayCore
 
     private CoroutineHandle CoroutineHandle;
 
+    public bool Destroyed = false;
+
     static DisplayCore()
     {
         RoundRestarting.RoundRestart.OnRestartTriggered += OnRestartStatic;
@@ -26,6 +28,8 @@ public class DisplayCore
 
     public void DestroySelf()
     {
+        if (Destroyed) return;
+        Destroyed = true;
         Timing.KillCoroutines(CoroutineHandle);
         DisplayCores.Remove(Hub);
         RoundRestarting.RoundRestart.OnRestartTriggered -= OnRestart;
@@ -116,6 +120,7 @@ public class DisplayCore
     /// <param name="priority">The priority of the update - defaults to 10.</param>
     public void Update(int priority = 10)
     {
+        if (Destroyed) return;
         if (IgnoreUpdate)
         {
             return;
@@ -193,6 +198,7 @@ public class DisplayCore
     /// </summary>
     internal void InternalUpdate()
     {
+        if (Destroyed) return;
         string text = ElemCombiner.Combine(GetAllElements(), this);
         if (string.IsNullOrEmpty(text))
         {
@@ -236,13 +242,14 @@ public class DisplayCore
 
     private void OnRestart()
     {
+        if (Destroyed) return;
         Log.Info($"Stopping update for {Hub?.nicknameSync?.MyNick ?? "null"} (Restart)");
         DestroySelf();
-        
     }
 
     private void OnPlayerRemoved(ReferenceHub hub)
     {
+        if (Destroyed) return;
         if (hub == Hub)
         {
             Log.Info($"Stopping update for {Hub?.nicknameSync?.MyNick ?? "null"} (Left)");

@@ -3,7 +3,7 @@
 using System.Text;
 using GameCore;
 using NorthwoodLib.Pools;
-
+using PluginAPI.Core;
 using RueI.Elements;
 using RueI.Extensions;
 using RueI.Parsing.Records;
@@ -46,7 +46,6 @@ public static class ElemCombiner
             try
             {
                 ParsedData parsedData = curElement.GetParsedData(core);
-
 
                 float funcPos = curElement.GetFunctionalPosition();
                 if (curElement.Options.HasFlagFast(Elements.Enums.ElementOptions.PreserveSpacing))
