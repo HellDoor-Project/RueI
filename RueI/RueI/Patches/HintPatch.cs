@@ -100,6 +100,8 @@ public static class HintPatch
                 new(OpCodes.Callvirt, PropertyGetter(typeof(Hint), nameof(Hint.DurationScalar))),
                 new(OpCodes.Ldc_R4, MAXANONYMOUSHINTTIME),
                 new(OpCodes.Call, Method(typeof(Math), nameof(Math.Min), new Type[] { typeof(float), typeof(float) })),
+                new(OpCodes.Ldc_R4, 0.2),
+                new(OpCodes.Call, Method(typeof(Math), nameof(Math.Max), new Type[] { typeof(float), typeof(float) })),
 
                 // core.Scheduler.ScheduleUpdate(TimeSpan.FromSeconds(time), 10, token);
                 new(OpCodes.Conv_R8),
