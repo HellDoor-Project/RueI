@@ -200,20 +200,19 @@ public class DisplayCore
     {
         if (Destroyed) return;
         string text = ElemCombiner.Combine(GetAllElements(), this);
-        if (string.IsNullOrEmpty(text))
+        if (PreviousHint != text)
         {
-            if (!EmptyPrevious) { EmptyPrevious = true; }
-            else return;
+            PreviousHint = text;
         }
         else
         {
-            EmptyPrevious = false;
+            return;
         }
         UnityAlternative.Provider.ShowHint(Hub, text);
         Events.Events.OnDisplayUpdated(new(this));
     }
 
-    public bool EmptyPrevious = false;
+    public string PreviousHint = "(null)";
 
     /// <summary>
     /// Adds a display to this <see cref="DisplayCore"/>.
