@@ -62,7 +62,7 @@ public class DisplayCore
         MainDisplay.Elements.Add(new MainDynamicPlayerElement());
         RoundRestarting.RoundRestart.OnRestartTriggered += OnRestart;
         ReferenceHub.OnPlayerRemoved += OnPlayerRemoved;
-        CoroutineHandle = Timing.CallPeriodically(float.PositiveInfinity, 1f, () => InternalUpdate());
+        CoroutineHandle = Timing.CallPeriodically(float.PositiveInfinity, 0.5f, () => InternalUpdate());
     }
 
     /// <summary>
@@ -200,19 +200,9 @@ public class DisplayCore
     {
         if (Destroyed) return;
         string text = ElemCombiner.Combine(GetAllElements(), this);
-        if (PreviousHint != text)
-        {
-            PreviousHint = text;
-        }
-        else
-        {
-            return;
-        }
         UnityAlternative.Provider.ShowHint(Hub, text);
         Events.Events.OnDisplayUpdated(new(this));
     }
-
-    public string PreviousHint = "(null)";
 
     /// <summary>
     /// Adds a display to this <see cref="DisplayCore"/>.

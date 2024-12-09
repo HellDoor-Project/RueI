@@ -181,7 +181,7 @@ public class UnityProvider : UnityAlternative
     public override IAsyncOperation PerformAsync(TimeSpan span, Action action) => new MECAsyncOperation(span, action);
 
     /// <inheritdoc/>
-    internal override void ShowHint(ReferenceHub hub, string message) => hub.connectionToClient.Send(new HintMessage(new TextHint(message, new HintParameter[] { new StringHintParameter(message) }, null, 99999)));
+    internal override void ShowHint(ReferenceHub hub, string message) => hub.connectionToClient.Send(new HintMessage(new TextHint(message, new HintParameter[] { new StringHintParameter(message) }, new HintEffect[] { new AlphaEffect(255f) }, 99999)));
 
     /// <summary>
     /// Represents an async operation using a <see cref="Task"/>.
